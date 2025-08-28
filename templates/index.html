@@ -2,41 +2,167 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Главная страница</title>
+  <title>Исследование оптимизации интеллекта (ROI)</title>
   <link rel="stylesheet" href="../static/css/styles.css">
   <style>
-    .card canvas {
+    .main-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding: 20px 0;
+    }
+    .main-header h1 {
+      font-size: 2.5em;
+      margin: 0;
+      color: #fff;
+      font-weight: 300;
+    }
+    .main-header p {
+      font-size: 1.1em;
+      color: #ccc;
+      margin-top: 10px;
+    }
+    
+    .tiles-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 30px;
+      max-width: 1200px;
+      margin: 0 auto 60px auto;
+      padding: 0 20px;
+    }
+    
+    .tile {
+      background: #111;
+      border-radius: 12px;
+      border: 2px solid #333;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.2s, border-color 0.2s;
+      height: 400px;
+      position: relative;
+    }
+    
+    .tile:hover {
+      transform: scale(1.02);
+      border-color: #555;
+    }
+    
+    .tile canvas {
+      width: 100%;
+      height: 320px;
+      display: block;
+      background: #111;
       transition: opacity 0.3s ease;
     }
     
-    .card:hover canvas {
+    .tile:hover canvas {
       opacity: 1;
     }
     
-    .card canvas:not(:hover) {
-      opacity: 0.8;
+    .tile canvas:not(:hover) {
+      opacity: 0.9;
+    }
+    
+    .tile-title {
+      padding: 15px 20px;
+      background: #222;
+      color: #fff;
+      font-size: 1.1em;
+      font-weight: 500;
+      text-align: center;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .site-description {
+      max-width: 800px;
+      margin: 0 auto 40px auto;
+      padding: 40px 20px;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      border: 1px solid #333;
+    }
+    
+    .site-description h2 {
+      font-size: 1.8em;
+      margin-bottom: 20px;
+      color: #fff;
+    }
+    
+    .site-description p {
+      font-size: 1.1em;
+      line-height: 1.6;
+      color: #ccc;
+      margin-bottom: 15px;
+    }
+    
+    .footer {
+      text-align: center;
+      padding: 30px 20px;
+      border-top: 1px solid #333;
+      margin-top: 40px;
+      color: #888;
+    }
+    
+    .footer p {
+      margin: 10px 0;
+    }
+    
+    .footer a {
+      color: #4a9eff;
+      text-decoration: none;
+    }
+    
+    .footer a:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <!-- Карточка 1 с превью -->
-    <div class="card">
-      <canvas id="previewBoids" onclick="openModal('./boids.html')"></canvas>
-      <div class="desc" onclick="openModal('./boids_description.html')">Boids Simulation</div>
+  <div class="main-header">
+    <h1>Исследование оптимизации интеллекта</h1>
+    <p>Интерактивные симуляции алгоритмов коллективного интеллекта</p>
+  </div>
+  
+  <div class="tiles-grid">
+    <!-- Плитка 1: Boids -->
+    <div class="tile" onclick="openModal('./boids.html')">
+      <canvas id="previewBoids"></canvas>
+      <div class="tile-title">Симуляция стаи (Boids)</div>
     </div>
 
-    <!-- Карточка 2 -->
-    <div class="card">
-      <canvas id="previewAnts" onclick="openModal('./ants.html')"></canvas>
-      <div class="desc">Ant Colony Optimization</div>
+    <!-- Плитка 2: Ant Colony -->
+    <div class="tile" onclick="openModal('./ants.html')">
+      <canvas id="previewAnts"></canvas>
+      <div class="tile-title">Муравьиная колония (ACO)</div>
     </div>
 
-    <!-- Карточка 3 -->
-    <div class="card">
-      <canvas id="previewSDS" onclick="openModal('./sds.html')"></canvas>
-      <div class="desc">Stochastic Diffusion Search</div>
+    <!-- Плитка 3: SDS -->
+    <div class="tile" onclick="openModal('./sds.html')">
+      <canvas id="previewSDS"></canvas>
+      <div class="tile-title">Стохастический диффузионный поиск</div>
     </div>
+
+    <!-- Плитка 4: Alternative Boids -->
+    <div class="tile" onclick="openModal('./boids_alt.html')">
+      <canvas id="previewBoidsAlt"></canvas>
+      <div class="tile-title">Альтернативная модель стаи</div>
+    </div>
+  </div>
+  
+  <div class="site-description">
+    <h2>О проекте</h2>
+    <p>Данный сайт представляет интерактивные симуляции алгоритмов коллективного интеллекта и оптимизации. Здесь вы можете изучить различные подходы к моделированию поведения групп агентов и методы поиска оптимальных решений.</p>
+    <p>Каждая симуляция содержит настраиваемые параметры, позволяющие исследовать влияние различных факторов на поведение системы. Все алгоритмы реализованы с использованием современных веб-технологий и работают непосредственно в браузере.</p>
+    <p>Проект создан в образовательных и исследовательских целях для демонстрации принципов работы алгоритмов искусственного интеллекта.</p>
+  </div>
+  
+  <div class="footer">
+    <p>Разработано в <strong>Курском Государственном Университете</strong></p>
+    <p>Исходный код доступен на <a href="https://github.com/RiddlerXenon/roi" target="_blank">GitHub</a></p>
   </div>
 
   <div class="overlay" id="overlay">
@@ -47,9 +173,33 @@
   </div>
 
   <script>
+    // Global variables to manage preview instances
+    let previewInstances = {};
+    let activeModal = null;
+
+    function pauseAllPreviews() {
+      Object.values(previewInstances).forEach(instance => {
+        if (instance && instance.pauseAnimation) {
+          instance.pauseAnimation();
+        }
+      });
+    }
+
+    function resumeAllPreviews() {
+      Object.values(previewInstances).forEach(instance => {
+        if (instance && instance.startAnimation) {
+          instance.startAnimation();
+        }
+      });
+    }
+
     function openModal(page) {
       const overlay = document.getElementById("overlay");
       const frame = document.getElementById("modalFrame");
+
+      // Pause all previews when opening modal
+      pauseAllPreviews();
+      activeModal = page;
 
       overlay.classList.add("active");
 
@@ -57,13 +207,13 @@
         const w = frame.contentWindow;
         if (!w) return;
 
-        // Для ants.html (если есть глобальная функция)
+        // For ants.html (if there's a global function)
         if (page.includes("ants.html") && typeof w.newGraph === "function") {
           w.newGraph();
         }
 
-        // Для других страниц ничего не вызываем, если нет нужной функции.
-        // (boids.html сам себя инициализирует, либо ты можешь аналогично вызвать здесь свою функцию)
+        // For other pages nothing is called if there's no needed function.
+        // (boids.html initializes itself, or you can similarly call your function here)
       };
 
       frame.src = page;
@@ -72,6 +222,14 @@
     function closeModal() {
       document.getElementById("modalFrame").src = "";
       document.getElementById("overlay").classList.remove("active");
+      
+      // Resume all previews when closing modal
+      setTimeout(() => {
+        if (!activeModal) {
+          resumeAllPreviews();
+        }
+        activeModal = null;
+      }, 100);
     }
   </script>
 
@@ -79,18 +237,18 @@
     import { initBoids } from "../static/js/boids.js";
     import { initAnts } from "../static/js/ants.js";
     import { initSDS } from "../static/js/sds.js";
+    import { initBoids as initBoidsAlt } from "../static/js/boids_alt.js";
 
-    // Ждем загрузки DOM
+    // Wait for DOM to load
     document.addEventListener('DOMContentLoaded', () => {
-      // Превью для boids - сначала отрисовываем статичную картинку, затем анимация по наведению
+      // Preview for boids - first draw static picture, then animation on hover
       const previewCanvas = document.getElementById("previewBoids");
-      let boidsInstance = null;
       let isAnimating = false;
 
-      // Проверяем что canvas готов
+      // Check if canvas is ready
       if (previewCanvas && previewCanvas.getContext) {
-        // Инициализируем превью в режиме паузы с отрисованным состоянием
-        boidsInstance = initBoids(previewCanvas, { 
+        // Initialize preview in pause mode with drawn state
+        previewInstances.boids = initBoids(previewCanvas, { 
           boidCount: 20, 
           boidSize: 3, 
           separationWeight: 3, 
@@ -98,41 +256,41 @@
           maxSpeed: 6, 
           fov: 360,
           isPreview: true,
-          startPaused: true  // Новый параметр - начинать в паузе, но с отрисованной картинкой
+          startPaused: true  // New parameter - start paused but with drawn picture
         });
 
-        // Дополнительная попытка отрисовки через requestAnimationFrame
+        // Additional drawing attempt via requestAnimationFrame
         requestAnimationFrame(() => {
-          if (boidsInstance && boidsInstance.drawStaticFrame) {
-            boidsInstance.drawStaticFrame();
+          if (previewInstances.boids && previewInstances.boids.drawStaticFrame) {
+            previewInstances.boids.drawStaticFrame();
           }
         });
 
-        // При наведении - запускаем анимацию
+        // On hover - start animation
         previewCanvas.addEventListener('mouseenter', () => {
-          if (boidsInstance && !isAnimating) {
+          if (previewInstances.boids && !isAnimating && !activeModal) {
             isAnimating = true;
-            boidsInstance.startAnimation();
+            previewInstances.boids.startAnimation();
           }
         });
 
-        // При уходе курсора - останавливаем анимацию через некоторое время
+        // On mouse leave - stop animation after some time
         previewCanvas.addEventListener('mouseleave', () => {
-          if (boidsInstance && isAnimating) {
+          if (previewInstances.boids && isAnimating) {
             setTimeout(() => {
-              if (boidsInstance) {
-                boidsInstance.pauseAnimation();
+              if (previewInstances.boids && !activeModal) {
+                previewInstances.boids.pauseAnimation();
                 isAnimating = false;
               }
-            }, 1000); // Анимация продолжается еще секунду после ухода курсора
+            }, 1000); // Animation continues for another second after mouse leave
           }
         });
       }
 
-      // Превью для ants (статичный граф без анимации)
+      // Preview for ants (static graph without animation)
       const previewAnts = document.getElementById("previewAnts");
       if (previewAnts) {
-        initAnts(previewAnts, { 
+        previewInstances.ants = initAnts(previewAnts, { 
           nodeCount: 8, 
           alpha: 1.0, 
           beta: 2.0, 
@@ -141,16 +299,60 @@
         });
       }
 
-      // Превью для SDS (статичная визуализация)
+      // Preview for SDS (static visualization)
       const previewSDS = document.getElementById("previewSDS");
       if (previewSDS) {
-        initSDS(previewSDS, { 
+        previewInstances.sds = initSDS(previewSDS, { 
           N: 30, 
           func: 'twopeaks', 
           showHeatmap: true, 
           showTraj: false, 
           showBest: true,
           heatGrid: 16
+        });
+      }
+
+      // Preview for alternative boids
+      const previewBoidsAlt = document.getElementById("previewBoidsAlt");
+      let isAnimatingAlt = false;
+      
+      if (previewBoidsAlt && previewBoidsAlt.getContext) {
+        previewInstances.boidsAlt = initBoidsAlt(previewBoidsAlt, {
+          dt: 1.0,
+          v_max: 2.0,
+          boidCount: 15,
+          isPreview: true,
+          startPaused: true
+        });
+
+        // Additional drawing attempt
+        requestAnimationFrame(() => {
+          if (previewInstances.boidsAlt && previewInstances.boidsAlt.drawStaticFrame) {
+            previewInstances.boidsAlt.drawStaticFrame();
+          }
+        });
+
+        // Animation on hover for alternative boids
+        previewBoidsAlt.addEventListener('mouseenter', () => {
+          if (previewInstances.boidsAlt && !isAnimatingAlt && !activeModal) {
+            isAnimatingAlt = true;
+            if (previewInstances.boidsAlt.startAnimation) {
+              previewInstances.boidsAlt.startAnimation();
+            }
+          }
+        });
+
+        previewBoidsAlt.addEventListener('mouseleave', () => {
+          if (previewInstances.boidsAlt && isAnimatingAlt) {
+            setTimeout(() => {
+              if (previewInstances.boidsAlt && !activeModal) {
+                if (previewInstances.boidsAlt.pauseAnimation) {
+                  previewInstances.boidsAlt.pauseAnimation();
+                }
+                isAnimatingAlt = false;
+              }
+            }, 1000);
+          }
         });
       }
     });

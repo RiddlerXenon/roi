@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Альтернативная модель стаи</title>
+  <link rel="stylesheet" href="../static/css/styles.css">
+  <style>
+    #controlPanel {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background: rgba(0, 0, 0, 0.9);
+      color: white;
+      border-radius: 10px;
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      max-width: 300px;
+      transition: all 0.3s ease;
+      z-index: 1000;
+      padding: 0;
+    }
+
+    #controlPanel.collapsed {
+      width: 50px;
+      height: 50px;
+      border-radius: 25px;
+      padding: 0;
+    }
+
+    #controlPanel:not(.collapsed) {
+      padding: 15px;
+    }
+
+    #toggleBtn {
+      background: #444;
+      border: none;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      padding: 8px 12px;
+      margin-bottom: 10px;
+    }
+
+    #controlPanel.collapsed #toggleBtn {
+      width: 50px;
+      height: 50px;
+      border-radius: 25px;
+      margin: 0;
+    }
+
+    #descriptionBtn {
+      background: #2a5d31;
+      border: none;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 100%;
+      padding: 8px 12px;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+
+    #descriptionBtn:hover {
+      background: #3a7d41;
+    }
+
+    .control-content {
+      display: none;
+    }
+
+    #controlPanel:not(.collapsed) .control-content {
+      display: block;
+    }
+
+    .control-group {
+      margin-bottom: 15px;
+    }
+
+    .control-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .control-row label {
+      flex: 1;
+      margin-right: 10px;
+      font-size: 12px;
+    }
+
+    .control-row input[type="range"] {
+      flex: 2;
+      margin-right: 8px;
+    }
+
+    .value-display {
+      min-width: 40px;
+      text-align: right;
+      font-size: 11px;
+      color: #ccc;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+    }
+
+    .button-group button {
+      background: #333;
+      border: 1px solid #555;
+      color: white;
+      border-radius: 3px;
+      cursor: pointer;
+      padding: 5px 8px;
+      font-size: 11px;
+      flex: 1;
+      min-width: 60px;
+    }
+
+    .button-group button:hover {
+      background: #444;
+    }
+
+    .button-group button.active {
+      background: #4a9eff;
+      border-color: #4a9eff;
+    }
+
+    #descriptionModal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+    }
+
+    #descriptionModal.active {
+      display: flex;
+    }
+
+    .description-content {
+      background: #222;
+      border-radius: 10px;
+      padding: 30px;
+      max-width: 800px;
+      max-height: 80vh;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    .description-close {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      background: none;
+      border: none;
+      color: #ccc;
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .description-close:hover {
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+  
+  <div id="controlPanel" class="collapsed">
+    <button id="toggleBtn">☰</button>
+    <div class="control-content">
+      <button id="descriptionBtn">📖 Описание</button>
+      
+      <!-- Control buttons -->
+      <div class="control-group">
+        <div class="button-group">
+          <button id="pauseBtn">Play</button>
+          <button id="wallsBtn" class="active">Стены</button>
+          <button id="resetBtn">Reset</button>
+        </div>
+      </div>
+
+      <!-- Main parameters -->
+      <div class="control-group">
+        <div class="control-row">
+          <label>dt:</label>
+          <input type="range" id="dt" min="0.1" max="2.0" step="0.1" value="1.0">
+          <span class="value-display" id="dtVal">1.0</span>
+        </div>
+        <div class="control-row">
+          <label>Boids:</label>
+          <input type="range" id="boidCount" min="10" max="200" step="5" value="50">
+          <span class="value-display" id="boidCountVal">50</span>
+        </div>
+        <div class="control-row">
+          <label>v_max:</label>
+          <input type="range" id="vmax" min="1.0" max="6.0" step="0.1" value="2.5">
+          <span class="value-display" id="vmaxVal">2.5</span>
+        </div>
+        <div class="control-row">
+          <label>a_max:</label>
+          <input type="range" id="amax" min="0.01" max="0.2" step="0.005" value="0.05">
+          <span class="value-display" id="amaxVal">0.05</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="descriptionModal">
+    <div class="description-content">
+      <button class="description-close" onclick="closeDescription()">✕</button>
+      <h2>Альтернативная модель стаи (Boids)</h2>
+      <div id="latexContent">
+        <p>Эта реализация представляет альтернативную модель стайного поведения, основанную на классических правилах Рейнольдса:</p>
+        
+        <h3>Математическая модель:</h3>
+        <p><strong>Правило разделения (Separation):</strong></p>
+        <p>$$\vec{F}_{sep} = -\sum_{j \neq i} \frac{\vec{r}_{ij}}{|\vec{r}_{ij}|^3}$$</p>
+        
+        <p><strong>Правило выравнивания (Alignment):</strong></p>
+        <p>$$\vec{F}_{align} = \frac{1}{\tau_{match}}(\langle\vec{v}\rangle - \vec{v}_i)$$</p>
+        
+        <p><strong>Правило сплочения (Cohesion):</strong></p>
+        <p>$$\vec{F}_{coh} = \frac{1}{\tau_{center}}(\langle\vec{r}\rangle - \vec{r}_i)$$</p>
+        
+        <p><strong>Уравнение движения:</strong></p>
+        <p>$$\frac{d\vec{v}}{dt} = \vec{F}_{sep} + \vec{F}_{align} + \vec{F}_{coh}$$</p>
+        <p>$$|\vec{a}| \leq a_{max}, \quad |\vec{v}| \leq v_{max}$$</p>
+        
+        <h3>Параметры:</h3>
+        <ul>
+          <li><strong>τ_match, τ_center:</strong> Константы релаксации для выравнивания и сплочения</li>
+          <li><strong>r, r_sep:</strong> Радиусы восприятия для различных поведений</li>
+          <li><strong>v_max, a_max:</strong> Максимальные скорость и ускорение</li>
+        </ul>
+        
+        <p>Модель демонстрирует возникновение коллективного поведения из простых локальных взаимодействий.</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      }
+    };
+
+    function openDescription() {
+      document.getElementById('descriptionModal').classList.add('active');
+      if (window.MathJax) {
+        MathJax.typesetPromise();
+      }
+    }
+
+    function closeDescription() {
+      document.getElementById('descriptionModal').classList.remove('active');
+    }
+
+    // Toggle control panel
+    document.getElementById('toggleBtn').addEventListener('click', () => {
+      document.getElementById('controlPanel').classList.toggle('collapsed');
+    });
+
+    // Description button
+    document.getElementById('descriptionBtn').addEventListener('click', openDescription);
+  </script>
+
+  <script type="module">
+    import { initBoids } from "../static/js/boids_alt.js";
+
+    const canvas = document.getElementById("canvas");
+    let boidsInstance = null;
+
+    // Initialize the simulation
+    document.addEventListener('DOMContentLoaded', () => {
+      boidsInstance = initBoids(canvas, {
+        dt: 1.0,
+        v_max: 2.5,
+        a_max: 0.05,
+        boidCount: 50
+      });
+
+      // Control bindings
+      const pauseBtn = document.getElementById('pauseBtn');
+      const wallsBtn = document.getElementById('wallsBtn');
+      const resetBtn = document.getElementById('resetBtn');
+
+      let isPaused = false;
+      let wallsEnabled = true;
+
+      pauseBtn.addEventListener('click', () => {
+        isPaused = !isPaused;
+        if (boidsInstance) {
+          if (isPaused) {
+            boidsInstance.pauseAnimation && boidsInstance.pauseAnimation();
+            pauseBtn.textContent = 'Play';
+          } else {
+            boidsInstance.startAnimation && boidsInstance.startAnimation();
+            pauseBtn.textContent = 'Pause';
+          }
+        }
+      });
+
+      wallsBtn.addEventListener('click', () => {
+        wallsEnabled = !wallsEnabled;
+        wallsBtn.classList.toggle('active', wallsEnabled);
+        if (boidsInstance && boidsInstance.updateParams) {
+          boidsInstance.updateParams({ walls: wallsEnabled });
+        }
+      });
+
+      resetBtn.addEventListener('click', () => {
+        if (boidsInstance && boidsInstance.reset) {
+          boidsInstance.reset();
+        }
+      });
+
+      // Parameter controls
+      const controls = ['dt', 'boidCount', 'vmax', 'amax'];
+      controls.forEach(id => {
+        const slider = document.getElementById(id);
+        const display = document.getElementById(id + 'Val');
+        
+        if (slider && display) {
+          slider.addEventListener('input', () => {
+            let value = parseFloat(slider.value);
+            if (id === 'boidCount') value = parseInt(value);
+            
+            display.textContent = id === 'boidCount' ? value : value.toFixed(id === 'dt' ? 1 : 2);
+            
+            if (boidsInstance && boidsInstance.updateParams) {
+              const paramMap = {
+                'dt': 'dt',
+                'boidCount': 'boidCount', 
+                'vmax': 'v_max',
+                'amax': 'a_max'
+              };
+              boidsInstance.updateParams({ [paramMap[id]]: value });
+            }
+          });
+        }
+      });
+    });
+  </script>
+</body>
+</html>
