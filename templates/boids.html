@@ -144,6 +144,7 @@
           <button id="wallsBtn" class="active">Стены</button>
           <button id="fovBtn">FOV</button>
           <button id="tracingBtn">Trace</button>
+          <button id="descriptionBtn" style="background: #0066cc; margin-left: 10px;">Описание</button>
         </div>
       </div>
 
@@ -277,6 +278,54 @@
     </div>
   </div>
 
+  <!-- Description Modal -->
+  <div id="descriptionModal" class="overlay">
+    <div class="modal">
+      <button class="close-btn" onclick="closeDescription()">✕</button>
+      <div class="modal-content" style="padding: 30px; height: calc(100% - 60px); overflow-y: auto; color: #eee;">
+        <h2 style="color: #fff; margin-bottom: 20px;">Boids Algorithm - Модель стайного поведения</h2>
+        <div id="descriptionContent">
+          <p>Алгоритм Boids (от "bird-oid objects") моделирует коллективное поведение стай птиц, косяков рыб и других групп животных.</p>
+          
+          <h3 style="color: #ccc; margin-top: 25px;">Основные правила Рейнольдса:</h3>
+          
+          <h4 style="color: #aaa;">1. Разделение (Separation)</h4>
+          <div class="math-block">a_sep = -k_sep * Σ(r_j - r_i) / |r_j - r_i|²</div>
+          <p>Избегание столкновений с соседними агентами</p>
+          
+          <h4 style="color: #aaa;">2. Выравнивание (Alignment)</h4>
+          <div class="math-block">a_align = k_align * (⟨v⟩ - v_i)</div>
+          <p>Согласование направления движения с соседями</p>
+          
+          <h4 style="color: #aaa;">3. Сплочение (Cohesion)</h4>
+          <div class="math-block">a_cohes = k_cohes * (⟨r⟩ - r_i)</div>
+          <p>Стремление к центру масс группы соседей</p>
+          
+          <h3 style="color: #ccc; margin-top: 25px;">Уравнения движения:</h3>
+          <div class="math-block">v(t+1) = v(t) + a_total * dt</div>
+          <div class="math-block">r(t+1) = r(t) + v(t) * dt</div>
+          <div class="math-block">a_total = a_sep + a_align + a_cohes</div>
+          
+          <h3 style="color: #ccc; margin-top: 25px;">Ограничения:</h3>
+          <ul style="color: #ccc;">
+            <li><span class="math-inline">|v| ≤ v_max</span> - максимальная скорость</li>
+            <li><span class="math-inline">|a| ≤ a_max</span> - максимальное ускорение</li>
+            <li><span class="math-inline">FOV</span> - поле зрения агента</li>
+            <li><span class="math-inline">r_perception</span> - радиус восприятия</li>
+          </ul>
+          
+          <h3 style="color: #ccc; margin-top: 25px;">Параметры модели:</h3>
+          <ul style="color: #ccc;">
+            <li><strong>φ</strong> - угол поля зрения (град)</li>
+            <li><strong>w_match, w_center, w_sep</strong> - веса правил</li>
+            <li><strong>τ_match, τ_center, τ_sep</strong> - времена релаксации</li>
+            <li><strong>r, r_sep</strong> - радиусы восприятия</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script type="module">
     import { initBoids } from "../static/js/boids.js";
 
@@ -290,6 +339,27 @@
 
     // Создаем UI
     createUI();
+
+    // Description modal functionality
+    function openDescription() {
+      document.getElementById("descriptionModal").classList.add("active");
+    }
+
+    function closeDescription() {
+      document.getElementById("descriptionModal").classList.remove("active");
+    }
+
+    // Make functions global
+    window.openDescription = openDescription;
+    window.closeDescription = closeDescription;
+
+    // Add description button event listener
+    document.addEventListener('DOMContentLoaded', () => {
+      const descBtn = document.getElementById('descriptionBtn');
+      if (descBtn) {
+        descBtn.addEventListener('click', openDescription);
+      }
+    });
 
     // Обновление размера канваса при изменении размера окна
     window.addEventListener("resize", () => {

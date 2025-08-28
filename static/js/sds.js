@@ -414,6 +414,7 @@ export function initSDS(canvas, options = {}) {
       </label>
 
       <button id="randSeed" style="padding:5px 10px;background:#222;border:1px solid #555;color:#eee;border-radius:5px;cursor:pointer;">Random</button>
+      <button id="descriptionBtn" style="padding:5px 10px;background:#0066cc;border:1px solid #0088ff;color:#eee;border-radius:5px;cursor:pointer;">Описание</button>
 
       <label class="tgl"><input type="checkbox" id="showHeatmap" ${params.showHeatmap?'checked':''}> Heatmap</label>
       <label class="tgl"><input type="checkbox" id="showTraj" ${params.showTraj?'checked':''}> Traj</label>

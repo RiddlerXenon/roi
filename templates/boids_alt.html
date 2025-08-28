@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Enhanced Boids Demo</title>
+  <link rel="stylesheet" href="../static/css/styles.css">
+  <style>
+    #controlPanel {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background: rgba(0, 0, 0, 0.9);
+      color: white;
+      border-radius: 10px;
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      max-width: 300px;
+      transition: all 0.3s ease;
+      z-index: 1000;
+      padding: 0;
+    }
+
+    #controlPanel.collapsed {
+      width: 50px;
+      height: 50px;
+      border-radius: 25px;
+      padding: 0;
+    }
+
+    #controlPanel:not(.collapsed) {
+      padding: 15px;
+    }
+
+    #toggleBtn {
+      background: #444;
+      border: none;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      padding: 8px 12px;
+      margin-bottom: 10px;
+    }
+
+    #controlPanel.collapsed #toggleBtn {
+      width: 50px;
+      height: 50px;
+      border-radius: 25px;
+      margin: 0;
+      font-size: 20px;
+      padding: 0;
+    }
+
+    #toggleBtn:hover {
+      background: #555;
+    }
+
+    #mainControls {
+      display: block;
+    }
+
+    #controlPanel.collapsed #mainControls {
+      display: none !important;
+    }
+
+    .control-group {
+      margin-bottom: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .control-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+    }
+
+    .control-row label {
+      min-width: 80px;
+      font-size: 12px;
+    }
+
+    .control-row input[type="range"] {
+      flex: 1;
+      min-width: 100px;
+    }
+
+    .control-row button, .button-group button {
+      background: #333;
+      border: 1px solid #555;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 11px;
+    }
+
+    .control-row button:hover, .button-group button:hover {
+      background: #444;
+    }
+
+    .control-row button.active, .button-group button.active {
+      background: #0066cc;
+    }
+
+    .value-display {
+      min-width: 40px;
+      text-align: center;
+      font-size: 11px;
+      color: #ccc;
+    }
+
+    #descriptionBtn {
+      background: #0066cc;
+      margin-left: 10px;
+    }
+
+    #descriptionBtn:hover {
+      background: #0080ff;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+
+  <div id="controlPanel" class="collapsed">
+    <button id="toggleBtn">☰</button>
+    <div id="mainControls">
+      
+      <!-- Control buttons -->
+      <div class="control-group">
+        <div class="button-group">
+          <button id="pauseBtn">Play</button>
+          <button id="wallsBtn" class="active">Стены</button>
+          <button id="fovBtn">FOV</button>
+          <button id="tracingBtn">Trace</button>
+          <button id="descriptionBtn">Описание</button>
+        </div>
+      </div>
+
+      <!-- Basic parameters -->
+      <div class="control-group">
+        <div class="control-row">
+          <label>dt:</label>
+          <input type="range" id="dt" min="0.1" max="2.0" step="0.1" value="1.0">
+          <span class="value-display" id="dtVal">1.0</span>
+        </div>
+        <div class="control-row">
+          <label>Boids:</label>
+          <input type="range" id="boidCount" min="20" max="200" value="100">
+          <span class="value-display" id="boidCountVal">100</span>
+        </div>
+        <div class="control-row">
+          <label>φ (deg):</label>
+          <input type="range" id="phi" min="45" max="360" step="1" value="135">
+          <span class="value-display" id="phiVal">135°</span>
+        </div>
+      </div>
+
+      <!-- Enhanced parameters -->
+      <div class="control-group">
+        <div class="control-row">
+          <label>v_max:</label>
+          <input type="range" id="vmax" min="1.0" max="6.0" step="0.1" value="2.5">
+          <span class="value-display" id="vmaxVal">2.5</span>
+        </div>
+        <div class="control-row">
+          <label>a_max:</label>
+          <input type="range" id="amax" min="0.01" max="0.2" step="0.005" value="0.05">
+          <span class="value-display" id="amaxVal">0.05</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Description Modal -->
+  <div id="descriptionModal" class="overlay">
+    <div class="modal">
+      <button class="close-btn" onclick="closeDescription()">✕</button>
+      <div class="modal-content">
+        <h2>Enhanced Boids Algorithm</h2>
+        <div id="descriptionContent">
+          <p>Расширенная модель стайного поведения с улучшенными параметрами:</p>
+          
+          <h3>Основные уравнения:</h3>
+          <p>$$\vec{v}_{i}(t+1) = \vec{v}_{i}(t) + \vec{a}_{i}(t) \cdot \Delta t$$</p>
+          <p>$$\vec{r}_{i}(t+1) = \vec{r}_{i}(t) + \vec{v}_{i}(t) \cdot \Delta t$$</p>
+          
+          <h3>Ускорение:</h3>
+          <p>$$\vec{a}_{i} = \vec{a}_{match} + \vec{a}_{center} + \vec{a}_{sep}$$</p>
+          
+          <h3>Правило выравнивания (Velocity Matching):</h3>
+          <p>$$\vec{a}_{match} = \frac{1}{\tau_{match}} \left( \langle \vec{v} \rangle_i - \vec{v}_i \right)$$</p>
+          
+          <h3>Правило центрирования (Cohesion):</h3>
+          <p>$$\vec{a}_{center} = \frac{1}{\tau_{center}} \left( \langle \vec{r} \rangle_i - \vec{r}_i \right)$$</p>
+          
+          <h3>Правило разделения (Separation):</h3>
+          <p>$$\vec{a}_{sep} = -\frac{1}{\tau_{sep}} \sum_{j \in N_{sep}(i)} \frac{\vec{r}_j - \vec{r}_i}{|\vec{r}_j - \vec{r}_i|^2}$$</p>
+          
+          <h3>Ограничения:</h3>
+          <p>$$|\vec{a}_i| \leq a_{max}, \quad |\vec{v}_i| \leq v_{max}$$</p>
+          
+          <p><strong>Особенности модели:</strong></p>
+          <ul>
+            <li>Метрическое и топологическое соседство</li>
+            <li>Поле зрения (FOV) для реалистичного восприятия</li>
+            <li>Ограничения по ускорению и скорости</li>
+            <li>Временные константы релаксации τ</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initBoids } from "../static/js/boids_alt.js";
+
+    const canvas = document.getElementById("canvas");
+    
+    const { createUI } = initBoids(canvas, {
+      boidCount: 100,
+      maxSpeed: 3.0,
+      isPreview: false
+    });
+
+    // Create UI using the alternative boids interface
+    if (createUI) {
+      createUI();
+    }
+
+    // Description modal functionality
+    function openDescription() {
+      document.getElementById("descriptionModal").classList.add("active");
+      
+      // Render LaTeX if KaTeX is available
+      if (typeof renderMathInElement !== 'undefined') {
+        renderMathInElement(document.getElementById("descriptionContent"), {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false}
+          ]
+        });
+      }
+    }
+
+    function closeDescription() {
+      document.getElementById("descriptionModal").classList.remove("active");
+    }
+
+    // Make functions global
+    window.openDescription = openDescription;
+    window.closeDescription = closeDescription;
+
+    // Add description button event listener
+    document.addEventListener('DOMContentLoaded', () => {
+      const descBtn = document.getElementById('descriptionBtn');
+      if (descBtn) {
+        descBtn.addEventListener('click', openDescription);
+      }
+    });
+
+    // Handle window resize
+    window.addEventListener("resize", () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  </script>
+</body>
+</html>

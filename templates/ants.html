@@ -9,6 +9,64 @@
   <canvas id="canvas"></canvas>
   <div class="controls" id="controls"></div>
 
+  <!-- Description Modal -->
+  <div id="descriptionModal" class="overlay">
+    <div class="modal">
+      <button class="close-btn" onclick="closeDescription()">✕</button>
+      <div class="modal-content" style="padding: 30px; height: calc(100% - 60px); overflow-y: auto; color: #eee;">
+        <h2 style="color: #fff; margin-bottom: 20px;">Ant Colony Optimization - Муравьиный алгоритм</h2>
+        <div id="descriptionContent">
+          <p>Алгоритм муравьиной колонии (ACO) - это метаэвристический алгоритм оптимизации, основанный на поведении муравьев при поиске пищи.</p>
+          
+          <h3 style="color: #ccc; margin-top: 25px;">Основные принципы:</h3>
+          
+          <h4 style="color: #aaa;">1. Вероятность перехода</h4>
+          <div class="math-block">p_ij = (τ_ij^α × η_ij^β) / Σ(τ_ik^α × η_ik^β)</div>
+          <p>где:</p>
+          <ul style="color: #ccc;">
+            <li><span class="math-inline">τ_ij</span> - количество феромона на ребре (i,j)</li>
+            <li><span class="math-inline">η_ij = 1/d_ij</span> - эвристическая информация (обратное расстояние)</li>
+            <li><span class="math-inline">α</span> - важность феромона</li>
+            <li><span class="math-inline">β</span> - важность эвристической информации</li>
+          </ul>
+          
+          <h4 style="color: #aaa;">2. Обновление феромона</h4>
+          <div class="math-block">τ_ij(t+1) = (1-ρ) × τ_ij(t) + Δτ_ij</div>
+          <p>где:</p>
+          <ul style="color: #ccc;">
+            <li><span class="math-inline">ρ</span> - коэффициент испарения феромона (0 < ρ < 1)</li>
+            <li><span class="math-inline">Δτ_ij</span> - количество феромона, добавленного муравьями</li>
+          </ul>
+          
+          <h4 style="color: #aaa;">3. Добавление феромона</h4>
+          <div class="math-block">Δτ_ij = Q / L_k</div>
+          <p>где:</p>
+          <ul style="color: #ccc;">
+            <li><span class="math-inline">Q</span> - константа</li>
+            <li><span class="math-inline">L_k</span> - длина пути k-го муравья</li>
+          </ul>
+          
+          <h3 style="color: #ccc; margin-top: 25px;">Алгоритм:</h3>
+          <ol style="color: #ccc;">
+            <li>Инициализация феромонных троп</li>
+            <li>Размещение муравьев в случайных узлах</li>
+            <li>Для каждого муравья: построение решения с использованием вероятностного правила</li>
+            <li>Обновление феромонных троп</li>
+            <li>Возврат к шагу 2 до достижения критерия остановки</li>
+          </ol>
+          
+          <h3 style="color: #ccc; margin-top: 25px;">Параметры:</h3>
+          <ul style="color: #ccc;">
+            <li><strong>α</strong> - влияние феромона (обычно 1-3)</li>
+            <li><strong>β</strong> - влияние эвристики (обычно 2-5)</li>
+            <li><strong>ρ</strong> - скорость испарения (обычно 0.1-0.5)</li>
+            <li><strong>Количество муравьев</strong> - размер колонии</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script type="module">
     import { initAnts } from "../static/js/ants.js";
 
@@ -25,6 +83,27 @@
 
     // Создаем панель управления
     createControls(controlsContainer);
+
+    // Description modal functionality
+    function openDescription() {
+      document.getElementById("descriptionModal").classList.add("active");
+    }
+
+    function closeDescription() {
+      document.getElementById("descriptionModal").classList.remove("active");
+    }
+
+    // Make functions global
+    window.openDescription = openDescription;
+    window.closeDescription = closeDescription;
+
+    // Add description button event listener
+    setTimeout(() => {
+      const descBtn = document.getElementById('descriptionBtn');
+      if (descBtn) {
+        descBtn.addEventListener('click', openDescription);
+      }
+    }, 100); // Small delay to ensure the button is created
   </script>
 </body>
 </html>

@@ -304,6 +304,7 @@ export function initAnts(canvas, options = {}) {
             <button id="startBtn" style="padding: 8px 15px; background: #059669; border: none; color: white; border-radius: 6px; cursor: pointer; font-weight: bold;">Старт</button>
             <button id="pauseBtn" style="padding: 8px 15px; background: #dc2626; border: none; color: white; border-radius: 6px; cursor: pointer; font-weight: bold;">Пауза</button>
             <button id="stepBtn" style="padding: 8px 15px; background: #7c3aed; border: none; color: white; border-radius: 6px; cursor: pointer; font-weight: bold;">Шаг</button>
+            <button id="descriptionBtn" style="padding: 8px 15px; background: #0066cc; border: none; color: white; border-radius: 6px; cursor: pointer; font-weight: bold;">Описание</button>
         </div>
         <div id="info" style="background: rgba(0,0,0,0.8); padding: 10px; text-align: center; color: #eee; font-family: Arial, sans-serif;">
             Итераций: <span id="iterationCount">0</span> | Лучший путь: <span id="bestPathLength">–</span>

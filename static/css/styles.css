@@ -1,12 +1,204 @@
 body { 
   margin: 0; 
   background: #111; 
-  overflow-x: hidden;  /* чтобы горизонтального скролла не было */
+  overflow-x: hidden;
   overflow-y: auto;
   color: #eee; 
-  font-family: sans-serif; 
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
 }
 
+/* Header styles */
+.main-header {
+  text-align: center;
+  padding: 40px 20px;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border-bottom: 2px solid #333;
+}
+
+.main-header h1 {
+  margin: 0 0 10px 0;
+  font-size: 2.5rem;
+  font-weight: 300;
+  color: #ffffff;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.main-header .subtitle {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #b0b0b0;
+  opacity: 0.8;
+}
+
+/* Main content */
+.main-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+/* Tiles grid */
+.tiles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+  margin-bottom: 60px;
+}
+
+@media (min-width: 768px) {
+  .tiles-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Tile styles */
+.tile {
+  background: #1a1a1a;
+  border-radius: 16px;
+  border: 2px solid #333;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+}
+
+.tile:hover {
+  transform: translateY(-5px);
+  border-color: #555;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.tile-preview {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+.tile-preview canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  background: #111;
+}
+
+.tile-title {
+  padding: 15px 20px 5px 20px;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #ffffff;
+  text-align: center;
+}
+
+.tile-subtitle {
+  padding: 0 20px 20px 20px;
+  font-size: 0.9rem;
+  color: #aaa;
+  text-align: center;
+  opacity: 0.8;
+}
+
+/* Site description */
+.site-description {
+  background: #1a1a1a;
+  border-radius: 16px;
+  border: 2px solid #333;
+  padding: 40px;
+  margin-bottom: 40px;
+}
+
+.site-description h2 {
+  margin: 0 0 20px 0;
+  font-size: 2rem;
+  color: #ffffff;
+  text-align: center;
+}
+
+.site-description p {
+  margin: 0 0 20px 0;
+  font-size: 1.1rem;
+  color: #ccc;
+  text-align: justify;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.site-description p:last-child {
+  margin-bottom: 0;
+}
+
+/* Footer */
+.main-footer {
+  background: #0f0f0f;
+  border-top: 2px solid #333;
+  padding: 30px 20px;
+  margin-top: 40px;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.footer-info p {
+  margin: 0 0 5px 0;
+  color: #ccc;
+}
+
+.footer-info strong {
+  color: #fff;
+}
+
+.github-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #ccc;
+  text-decoration: none;
+  padding: 10px 20px;
+  border: 2px solid #333;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.github-link:hover {
+  color: #fff;
+  border-color: #555;
+  background: #222;
+}
+
+@media (max-width: 768px) {
+  .footer-content {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .main-header h1 {
+    font-size: 2rem;
+  }
+  
+  .main-header .subtitle {
+    font-size: 1rem;
+  }
+  
+  .site-description {
+    padding: 30px 20px;
+  }
+  
+  .site-description h2 {
+    font-size: 1.6rem;
+  }
+}
+
+/* Legacy card styles for backward compatibility */
 .container {
   display: flex;
   flex-direction: column;
@@ -104,4 +296,53 @@ canvas {
   left: 0;
   right: 0;
   z-index: 1000;
+}
+
+/* Math rendering styles */
+.math-block {
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 4px;
+  padding: 10px;
+  margin: 10px 0;
+  font-family: 'Courier New', monospace;
+  color: #e0e0e0;
+  text-align: center;
+  font-size: 14px;
+}
+
+.math-inline {
+  background: #333;
+  padding: 2px 4px;
+  border-radius: 2px;
+  font-family: 'Courier New', monospace;
+  color: #e0e0e0;
+  font-size: 12px;
+}
+
+/* Modal content styling */
+.modal-content {
+  color: #eee;
+}
+
+.modal-content h2 {
+  color: #fff;
+  margin-bottom: 20px;
+}
+
+.modal-content h3 {
+  color: #ccc;
+  margin-top: 25px;
+}
+
+.modal-content h4 {
+  color: #aaa;
+}
+
+.modal-content ul, .modal-content ol {
+  color: #ccc;
+}
+
+.modal-content strong {
+  color: #fff;
 }

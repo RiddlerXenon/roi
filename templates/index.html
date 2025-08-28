@@ -2,42 +2,109 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Главная страница</title>
+  <title>ROI - Исследование алгоритмов оптимизации</title>
   <link rel="stylesheet" href="../static/css/styles.css">
+  <!-- Simple math styling -->
   <style>
-    .card canvas {
-      transition: opacity 0.3s ease;
+    .math-block {
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 4px;
+      padding: 10px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      color: #e0e0e0;
+      text-align: center;
     }
-    
-    .card:hover canvas {
-      opacity: 1;
-    }
-    
-    .card canvas:not(:hover) {
-      opacity: 0.8;
+    .math-inline {
+      background: #333;
+      padding: 2px 4px;
+      border-radius: 2px;
+      font-family: 'Courier New', monospace;
+      color: #e0e0e0;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <!-- Карточка 1 с превью -->
-    <div class="card">
-      <canvas id="previewBoids" onclick="openModal('./boids.html')"></canvas>
-      <div class="desc" onclick="openModal('./boids_description.html')">Boids Simulation</div>
-    </div>
+  <!-- Header -->
+  <header class="main-header">
+    <h1>Исследование алгоритмов оптимизации и интеллектуальных систем</h1>
+    <p class="subtitle">Интерактивные демонстрации и визуализации</p>
+  </header>
 
-    <!-- Карточка 2 -->
-    <div class="card">
-      <canvas id="previewAnts" onclick="openModal('./ants.html')"></canvas>
-      <div class="desc">Ant Colony Optimization</div>
-    </div>
+  <!-- Main content -->
+  <main class="main-content">
+    <!-- Algorithm tiles grid -->
+    <section class="tiles-grid">
+      <!-- Tile 1: Boids -->
+      <div class="tile" onclick="openModal('./boids.html')">
+        <div class="tile-preview">
+          <canvas id="previewBoids"></canvas>
+        </div>
+        <div class="tile-title">Boids Simulation</div>
+        <div class="tile-subtitle">Модель стайного поведения</div>
+      </div>
 
-    <!-- Карточка 3 -->
-    <div class="card">
-      <canvas id="previewSDS" onclick="openModal('./sds.html')"></canvas>
-      <div class="desc">Stochastic Diffusion Search</div>
+      <!-- Tile 2: Ant Colony -->
+      <div class="tile" onclick="openModal('./ants.html')">
+        <div class="tile-preview">
+          <canvas id="previewAnts"></canvas>
+        </div>
+        <div class="tile-title">Ant Colony Optimization</div>
+        <div class="tile-subtitle">Муравьиный алгоритм</div>
+      </div>
+
+      <!-- Tile 3: SDS -->
+      <div class="tile" onclick="openModal('./sds.html')">
+        <div class="tile-preview">
+          <canvas id="previewSDS"></canvas>
+        </div>
+        <div class="tile-title">Stochastic Diffusion Search</div>
+        <div class="tile-subtitle">Стохастический поиск</div>
+      </div>
+
+      <!-- Tile 4: Enhanced Boids -->
+      <div class="tile" onclick="openModal('./boids_alt.html')">
+        <div class="tile-preview">
+          <canvas id="previewBoidsAlt"></canvas>
+        </div>
+        <div class="tile-title">Enhanced Boids</div>
+        <div class="tile-subtitle">Расширенная модель стай</div>
+      </div>
+    </section>
+
+    <!-- Site description -->
+    <section class="site-description">
+      <h2>О проекте</h2>
+      <p>
+        Данный веб-ресурс представляет собой интерактивную платформу для изучения и демонстрации 
+        различных алгоритмов оптимизации и методов искусственного интеллекта. Каждый алгоритм 
+        реализован с возможностью интерактивного управления параметрами и визуализации процесса работы в реальном времени.
+      </p>
+      <p>
+        Проект создан для образовательных целей и исследований в области вычислительного интеллекта, 
+        предоставляя наглядное представление о принципах работы биоинспирированных алгоритмов и методов роевого интеллекта.
+      </p>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="main-footer">
+    <div class="footer-content">
+      <div class="footer-info">
+        <p>Разработано в <strong>Курском Государственном Университете</strong></p>
+        <p>Кафедра прикладной математики и компьютерных технологий</p>
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/RiddlerXenon/roi" target="_blank" class="github-link">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+          </svg>
+          GitHub Repository
+        </a>
+      </div>
     </div>
-  </div>
+  </footer>
 
   <div class="overlay" id="overlay">
     <div class="modal">
@@ -57,13 +124,13 @@
         const w = frame.contentWindow;
         if (!w) return;
 
-        // Для ants.html (если есть глобальная функция)
+        // Pause all previews when opening modal
+        pauseAllPreviews();
+
+        // For specific pages that need initialization
         if (page.includes("ants.html") && typeof w.newGraph === "function") {
           w.newGraph();
         }
-
-        // Для других страниц ничего не вызываем, если нет нужной функции.
-        // (boids.html сам себя инициализирует, либо ты можешь аналогично вызвать здесь свою функцию)
       };
 
       frame.src = page;
@@ -72,6 +139,28 @@
     function closeModal() {
       document.getElementById("modalFrame").src = "";
       document.getElementById("overlay").classList.remove("active");
+      
+      // Resume previews when closing modal
+      resumeAllPreviews();
+    }
+
+    // Global preview control functions
+    let previewInstances = {};
+
+    function pauseAllPreviews() {
+      Object.values(previewInstances).forEach(instance => {
+        if (instance && instance.pauseAnimation) {
+          instance.pauseAnimation();
+        }
+      });
+    }
+
+    function resumeAllPreviews() {
+      Object.values(previewInstances).forEach(instance => {
+        if (instance && instance.startAnimation) {
+          instance.startAnimation();
+        }
+      });
     }
   </script>
 
@@ -80,17 +169,12 @@
     import { initAnts } from "../static/js/ants.js";
     import { initSDS } from "../static/js/sds.js";
 
-    // Ждем загрузки DOM
+    // Wait for DOM to load
     document.addEventListener('DOMContentLoaded', () => {
-      // Превью для boids - сначала отрисовываем статичную картинку, затем анимация по наведению
-      const previewCanvas = document.getElementById("previewBoids");
-      let boidsInstance = null;
-      let isAnimating = false;
-
-      // Проверяем что canvas готов
-      if (previewCanvas && previewCanvas.getContext) {
-        // Инициализируем превью в режиме паузы с отрисованным состоянием
-        boidsInstance = initBoids(previewCanvas, { 
+      // Preview for boids
+      const previewBoids = document.getElementById("previewBoids");
+      if (previewBoids) {
+        previewInstances.boids = initBoids(previewBoids, { 
           boidCount: 20, 
           boidSize: 3, 
           separationWeight: 3, 
@@ -98,62 +182,63 @@
           maxSpeed: 6, 
           fov: 360,
           isPreview: true,
-          startPaused: true  // Новый параметр - начинать в паузе, но с отрисованной картинкой
-        });
-
-        // Дополнительная попытка отрисовки через requestAnimationFrame
-        requestAnimationFrame(() => {
-          if (boidsInstance && boidsInstance.drawStaticFrame) {
-            boidsInstance.drawStaticFrame();
-          }
-        });
-
-        // При наведении - запускаем анимацию
-        previewCanvas.addEventListener('mouseenter', () => {
-          if (boidsInstance && !isAnimating) {
-            isAnimating = true;
-            boidsInstance.startAnimation();
-          }
-        });
-
-        // При уходе курсора - останавливаем анимацию через некоторое время
-        previewCanvas.addEventListener('mouseleave', () => {
-          if (boidsInstance && isAnimating) {
-            setTimeout(() => {
-              if (boidsInstance) {
-                boidsInstance.pauseAnimation();
-                isAnimating = false;
-              }
-            }, 1000); // Анимация продолжается еще секунду после ухода курсора
-          }
+          autoStart: true
         });
       }
 
-      // Превью для ants (статичный граф без анимации)
+      // Preview for ants
       const previewAnts = document.getElementById("previewAnts");
       if (previewAnts) {
-        initAnts(previewAnts, { 
+        previewInstances.ants = initAnts(previewAnts, { 
           nodeCount: 8, 
           alpha: 1.0, 
           beta: 2.0, 
           rho: 0.3, 
-          autoRun: false 
+          autoRun: true
         });
       }
 
-      // Превью для SDS (статичная визуализация)
+      // Preview for SDS
       const previewSDS = document.getElementById("previewSDS");
       if (previewSDS) {
-        initSDS(previewSDS, { 
+        previewInstances.sds = initSDS(previewSDS, { 
           N: 30, 
           func: 'twopeaks', 
           showHeatmap: true, 
           showTraj: false, 
           showBest: true,
-          heatGrid: 16
+          heatGrid: 16,
+          autoStart: true
+        });
+      }
+
+      // Preview for enhanced boids (will need to create boids_alt.html)
+      const previewBoidsAlt = document.getElementById("previewBoidsAlt");
+      if (previewBoidsAlt) {
+        // For now, use regular boids with different parameters
+        previewInstances.boidsAlt = initBoids(previewBoidsAlt, { 
+          boidCount: 30, 
+          boidSize: 2, 
+          separationWeight: 2, 
+          separationDist: 50, 
+          maxSpeed: 4, 
+          fov: 180,
+          isPreview: true,
+          autoStart: true
+        });
+      }
+
+      // Initialize KaTeX auto-render when available
+      if (typeof renderMathInElement !== 'undefined') {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false}
+          ]
         });
       }
     });
+  </script>
   </script>
 </body>
 </html>

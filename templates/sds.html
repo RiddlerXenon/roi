@@ -9,6 +9,68 @@
   <canvas id="canvas"></canvas>
   <div class="controls" id="controls"></div>
 
+  <!-- Description Modal -->
+  <div id="descriptionModal" class="overlay">
+    <div class="modal">
+      <button class="close-btn" onclick="closeDescription()">✕</button>
+      <div class="modal-content" style="padding: 30px; height: calc(100% - 60px); overflow-y: auto; color: #eee;">
+        <h2 style="color: #fff; margin-bottom: 20px;">Stochastic Diffusion Search - Стохастический диффузионный поиск</h2>
+        <div id="descriptionContent">
+          <p>Стохастический диффузионный поиск (SDS) - это метаэвристический алгоритм оптимизации, основанный на простых агентах, которые взаимодействуют стохастически.</p>
+          
+          <h3 style="color: #ccc; margin-top: 25px;">Основные принципы:</h3>
+          
+          <h4 style="color: #aaa;">1. Фаза тестирования</h4>
+          <p>Каждый агент проверяет качество своей текущей гипотезы:</p>
+          <div class="math-block">active[i] = f(x[i]) > threshold</div>
+          <p>где <span class="math-inline">f(x)</span> - целевая функция, <span class="math-inline">x[i]</span> - позиция агента i</p>
+          
+          <h4 style="color: #aaa;">2. Фаза диффузии</h4>
+          <p>Неактивные агенты выбирают случайного активного агента для копирования:</p>
+          <div class="math-block">if !active[i]: x[i] = x[j] + N(0, σ²)</div>
+          <p>где <span class="math-inline">j</span> - случайный активный агент, <span class="math-inline">N(0, σ²)</span> - гауссовский шум</p>
+          
+          <h4 style="color: #aaa;">3. Случайные блуждания</h4>
+          <p>С вероятностью <span class="math-inline">p_restart</span> агент начинает случайное блуждание:</p>
+          <div class="math-block">x[i] = random_position()</div>
+          
+          <h3 style="color: #ccc; margin-top: 25px;">Алгоритм SDS:</h3>
+          <ol style="color: #ccc;">
+            <li>Инициализация: размещение N агентов случайно в пространстве поиска</li>
+            <li>Фаза тестирования: оценка активности каждого агента</li>
+            <li>Фаза диффузии: неактивные агенты копируют активных с добавлением шума</li>
+            <li>Случайные перезапуски с вероятностью p_restart</li>
+            <li>Повторение шагов 2-4 до сходимости</li>
+          </ol>
+          
+          <h3 style="color: #ccc; margin-top: 25px;">Параметры алгоритма:</h3>
+          <ul style="color: #ccc;">
+            <li><strong>N</strong> - количество агентов в популяции</li>
+            <li><strong>σ</strong> - стандартное отклонение гауссовского шума</li>
+            <li><strong>p_restart</strong> - вероятность случайного перезапуска</li>
+            <li><strong>threshold</strong> - порог активности агента</li>
+          </ul>
+          
+          <h3 style="color: #ccc; margin-top: 25px;">Целевые функции:</h3>
+          <ul style="color: #ccc;">
+            <li><strong>Sphere</strong>: f(x,y) = -(x² + y²)</li>
+            <li><strong>Rosenbrock</strong>: f(x,y) = -[(1-x)² + 100(y-x²)²]</li>
+            <li><strong>Ackley</strong>: f(x,y) = -[-20·exp(-0.2√(x²+y²)/2) - exp((cos(2πx)+cos(2πy))/2) + 20 + e]</li>
+            <li><strong>Two Peaks</strong>: комбинация двух гауссовских пиков</li>
+          </ul>
+          
+          <h3 style="color: #ccc; margin-top: 25px;">Визуализация:</h3>
+          <ul style="color: #ccc;">
+            <li><strong>Heatmap</strong> - тепловая карта целевой функции</li>
+            <li><strong>Agents</strong> - текущие позиции агентов (активные/неактивные)</li>
+            <li><strong>Trajectories</strong> - следы перемещения агентов</li>
+            <li><strong>Best</strong> - отметка лучшего найденного решения</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script type="module">
     import { initSDS } from "../static/js/sds.js";
 
@@ -29,6 +91,27 @@
 
     // Создаем панель управления
     createControls(controlsContainer);
+
+    // Description modal functionality
+    function openDescription() {
+      document.getElementById("descriptionModal").classList.add("active");
+    }
+
+    function closeDescription() {
+      document.getElementById("descriptionModal").classList.remove("active");
+    }
+
+    // Make functions global
+    window.openDescription = openDescription;
+    window.closeDescription = closeDescription;
+
+    // Add description button event listener
+    setTimeout(() => {
+      const descBtn = document.getElementById('descriptionBtn');
+      if (descBtn) {
+        descBtn.addEventListener('click', openDescription);
+      }
+    }, 100); // Small delay to ensure the button is created
   </script>
 </body>
 </html>
